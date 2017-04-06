@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Placeholder Themes Example</string>
+    <string name="light_theme_placeholder">Light</string>
+    <string name="dark_theme_placeholder">Dark</string>
+    <string name="current_theme">Current theme: $1%s</string>
+    <string name="theme_selection_title">Choose your theme</string>
+</resources>
