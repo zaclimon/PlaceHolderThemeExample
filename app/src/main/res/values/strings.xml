@@ -4,4 +4,5 @@
     <string name="dark_theme_placeholder">Dark</string>
     <string name="current_theme">Current theme: $1%s</string>
     <string name="theme_selection_title">Choose your theme</string>
+    <string name="apply_text">Apply</string>
 </resources>
