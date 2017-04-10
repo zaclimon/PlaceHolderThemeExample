@@ -9,13 +9,15 @@ import android.widget.FrameLayout;
 
 public class MainActivity extends AppCompatActivity {
 
+    public static final String PREFERENCES_FILE = "example_prefs";
+    public static final String DARK_THEME_KEY = "dark_theme";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-        fragmentTransaction.add(R.id.fragmentPlaceholder, MainFragment.newInstance(null, null));
+        fragmentTransaction.add(R.id.fragmentPlaceholder, new MainFragment());
         fragmentTransaction.commit();
     }
 }

@@ -1,65 +1,87 @@
 package com.zaclimon.placeholderthemesexample;
 
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.support.annotation.IdRes;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.RadioGroup;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import static android.R.attr.breadCrumbShortTitle;
+import static android.R.attr.id;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link MainFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class MainFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-
-    public MainFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment MainFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static MainFragment newInstance(String param1, String param2) {
-        MainFragment fragment = new MainFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_main, container, false);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        final RadioGroup radioGroup = (RadioGroup) getActivity().findViewById(R.id.radioButtonGroup);
+        final Button applyButton = (Button) getActivity().findViewById(R.id.applyButton);
+        TextView currentThemeTextView = (TextView) getActivity().findViewById(R.id.currentThemeTextView);
+
+        applyButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int id = radioGroup.getCheckedRadioButtonId();
+
+                if (id != 0) {
+                    changeTheme(id);
+                }
+            }
+        });
+
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
+                String currentTheme = getCurrentTheme();
+
+                if (checkedId == R.id.lightThemeRadioButton && currentTheme.equals(getString(R.string.dark_theme_placeholder)) ||
+                        checkedId == R.id.darkThemeRadioButton && currentTheme.equals(getString(R.string.light_theme_placeholder))) {
+                    applyButton.setEnabled(true);
+                } else {
+                    applyButton.setEnabled(false);
+                }
+            }
+        });
+
+        currentThemeTextView.setText(getString(R.string.current_theme, getCurrentTheme()));
+
+    }
+
+    private void changeTheme(int id) {
+
+        SharedPreferences.Editor editor = getActivity().getSharedPreferences(MainActivity.PREFERENCES_FILE, Context.MODE_PRIVATE).edit();
+
+        switch (id) {
+            case R.id.lightThemeRadioButton:
+                editor.putBoolean(MainActivity.DARK_THEME_KEY, false);
+                break;
+            case R.id.darkThemeRadioButton:
+                editor.putBoolean(MainActivity.DARK_THEME_KEY, true);
+                break;
+        }
+
+        editor.apply();
+
+    }
+
+    private String getCurrentTheme() {
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(MainActivity.PREFERENCES_FILE, Context.MODE_PRIVATE);
+        return (sharedPreferences.getBoolean(MainActivity.DARK_THEME_KEY, false) ? getString(R.string.dark_theme_placeholder) : getString(R.string.light_theme_placeholder));
     }
 
 }
