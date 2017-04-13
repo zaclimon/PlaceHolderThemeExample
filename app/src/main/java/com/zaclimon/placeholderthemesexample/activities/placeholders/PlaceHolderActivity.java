@@ -44,6 +44,9 @@ public abstract class PlaceHolderActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // Add some sleep to really see the placeholder
+        SystemClock.sleep(1000);
+
         Intent baseActivityIntent = new Intent(this, MainActivity.class);
         startActivity(baseActivityIntent);
         finish();
