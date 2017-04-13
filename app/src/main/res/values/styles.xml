@@ -14,4 +14,12 @@
         <item name="android:textColorPrimary">#DE000000</item>
     </style>
 
+    <style name="AppTheme.Launcher">
+        <item name="android:windowBackground">@drawable/start_placeholder</item>
+    </style>
+
+    <style name="AppThemeLight.Launcher">
+        <item name="android:windowBackground">@drawable/start_placeholder</item>
+    </style>
+
 </resources>

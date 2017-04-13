@@ -1,11 +1,13 @@
-package com.zaclimon.placeholderthemesexample;
+package com.zaclimon.placeholderthemesexample.activities;
 
-import android.app.Fragment;
-import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.widget.FrameLayout;
+
+import com.zaclimon.placeholderthemesexample.R;
+import com.zaclimon.placeholderthemesexample.fragments.MainFragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -14,10 +16,24 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        if (isThemeDark()) {
+            setTheme(R.style.AppTheme);
+        } else {
+            setTheme(R.style.AppThemeLight);
+        }
+
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
         fragmentTransaction.add(R.id.fragmentPlaceholder, new MainFragment());
         fragmentTransaction.commit();
     }
+
+    private boolean isThemeDark() {
+        SharedPreferences sharedPreferences = getSharedPreferences(PREFERENCES_FILE, Context.MODE_PRIVATE);
+        return (sharedPreferences.getBoolean(DARK_THEME_KEY, false));
+    }
+
 }

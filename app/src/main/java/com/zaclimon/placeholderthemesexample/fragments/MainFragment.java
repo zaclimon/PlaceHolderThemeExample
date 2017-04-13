@@ -1,4 +1,4 @@
-package com.zaclimon.placeholderthemesexample;
+package com.zaclimon.placeholderthemesexample.fragments;
 
 
 import android.content.Context;
@@ -12,10 +12,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import static android.R.attr.breadCrumbShortTitle;
-import static android.R.attr.id;
+import com.zaclimon.placeholderthemesexample.activities.MainActivity;
+import com.zaclimon.placeholderthemesexample.R;
 
 public class MainFragment extends Fragment {
 
@@ -74,9 +73,7 @@ public class MainFragment extends Fragment {
                 editor.putBoolean(MainActivity.DARK_THEME_KEY, true);
                 break;
         }
-
         editor.apply();
-
     }
 
     private String getCurrentTheme() {
