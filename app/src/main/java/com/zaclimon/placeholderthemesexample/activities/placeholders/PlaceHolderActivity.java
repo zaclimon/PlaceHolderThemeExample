@@ -40,6 +40,9 @@ public abstract class PlaceHolderActivity extends AppCompatActivity {
      https://www.reddit.com/r/androiddev/comments/3r7lvg/use_cold_start_time_to_make_your_app_look_much/cwml976/
      */
 
+    public static final String LIGHT_THEME_PLACEHOLDER_COMPONENT_NAME = ".LightTheme.PlaceHolder";
+    public static final String DARK_THEME_PLACEHOLDER_COMPONENT_NAME = ".DarkTheme.PlaceHolder";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

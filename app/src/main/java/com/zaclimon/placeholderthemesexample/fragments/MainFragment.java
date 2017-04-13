@@ -1,8 +1,12 @@
 package com.zaclimon.placeholderthemesexample.fragments;
 
 
+import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.annotation.IdRes;
@@ -13,8 +17,13 @@ import android.widget.Button;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.zaclimon.placeholderthemesexample.BuildConfig;
 import com.zaclimon.placeholderthemesexample.activities.MainActivity;
 import com.zaclimon.placeholderthemesexample.R;
+import com.zaclimon.placeholderthemesexample.activities.placeholders.PlaceHolderActivity;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainFragment extends Fragment {
 
@@ -66,14 +75,41 @@ public class MainFragment extends Fragment {
         SharedPreferences.Editor editor = getActivity().getSharedPreferences(MainActivity.PREFERENCES_FILE, Context.MODE_PRIVATE).edit();
 
         switch (id) {
-            case R.id.lightThemeRadioButton:
-                editor.putBoolean(MainActivity.DARK_THEME_KEY, false);
-                break;
             case R.id.darkThemeRadioButton:
                 editor.putBoolean(MainActivity.DARK_THEME_KEY, true);
+                switchActivities(true);
+                break;
+            case R.id.lightThemeRadioButton:
+                editor.putBoolean(MainActivity.DARK_THEME_KEY, false);
+                switchActivities(false);
                 break;
         }
         editor.apply();
+    }
+
+    private void switchActivities(boolean isDark) {
+
+        final String APPLICATION_NAME = BuildConfig.APPLICATION_ID;
+        PackageManager packageManager = getActivity().getPackageManager();
+        List<ComponentName> componentNames = new ArrayList<>();
+
+        ComponentName lightThemeComponentName = new ComponentName(APPLICATION_NAME, APPLICATION_NAME + PlaceHolderActivity.LIGHT_THEME_PLACEHOLDER_COMPONENT_NAME);
+        ComponentName darkThemeComponentName = new ComponentName(APPLICATION_NAME, APPLICATION_NAME + PlaceHolderActivity.DARK_THEME_PLACEHOLDER_COMPONENT_NAME);
+
+        componentNames.add(lightThemeComponentName);
+        componentNames.add(darkThemeComponentName);
+
+        for (ComponentName tempComp : componentNames) {
+            packageManager.setComponentEnabledSetting(tempComp, PackageManager.COMPONENT_ENABLED_STATE_DEFAULT, PackageManager.DONT_KILL_APP);
+        }
+
+        // Since the light theme is the default one, we only change the alias if the theme is dark.
+        if (isDark) {
+            packageManager.setComponentEnabledSetting(lightThemeComponentName, PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
+            packageManager.setComponentEnabledSetting(darkThemeComponentName, PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
+        }
+
+        getActivity().recreate();
     }
 
     private String getCurrentTheme() {
