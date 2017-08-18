@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:opacity="opaque">
+
+    <item>
+        <shape>
+            <solid android:color="?android:attr/colorBackground"/>
+        </shape>
+    </item>
+
+    <!-- Create a drawable of the size of the status bar whilst having it's color as well
+         since android:windowBackground takes all the windows size including the status bar
+     -->
+    <item android:gravity="top">
+        <shape android:shape="rectangle">
+            <solid android:color="?colorPrimaryDark"/>
+            <size android:height="24dp"/>
+        </shape>
+    </item>
+
+    <!-- Start only the toolbar section after the zone reserved to the status bar. -->
+    <item
+        android:gravity="top"
+        android:top="24dp">
+        <shape android:shape="rectangle">
+            <solid android:color="?colorPrimary"/>
+            <size android:height="?actionBarSize"/>
+        </shape>
+    </item>
+
+</layer-list>
