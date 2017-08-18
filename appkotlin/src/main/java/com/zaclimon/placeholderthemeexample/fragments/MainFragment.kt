@@ -5,6 +5,7 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -98,7 +99,17 @@ class MainFragment : Fragment() {
             packageManager.setComponentEnabledSetting(darkThemeComponentName, PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP)
         }
 
-        activity.recreate()
+        /*
+          There is a weird issue starting from Nougat where a recreated Activity might not initialize
+          itself completely. In that case, recreate the Activity using the old fashioned method.
+          */
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            var intent = activity.intent
+            startActivity(intent)
+            activity.finish()
+        } else {
+            activity.recreate()
+        }
     }
 
 }

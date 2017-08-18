@@ -4,9 +4,11 @@ package com.zaclimon.placeholderthemesexample.fragments;
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.annotation.IdRes;
@@ -109,7 +111,17 @@ public class MainFragment extends Fragment {
             packageManager.setComponentEnabledSetting(darkThemeComponentName, PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
         }
 
-        getActivity().recreate();
+         /*
+          There is a weird issue starting from Nougat where a recreated Activity might not initialize
+          itself completely. In that case, recreate the Activity using the old fashioned method.
+          */
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            Intent intent = getActivity().getIntent();
+            startActivity(intent);
+            getActivity().finish();
+        } else {
+            getActivity().recreate();
+        }
     }
 
     private String getCurrentTheme() {
